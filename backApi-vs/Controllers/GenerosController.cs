@@ -17,8 +17,9 @@ namespace backApi_vs.Controllers
         {
             return repositorio.ObtenerTodosLosGeneros();
         }
-        [HttpGet("ejemplo")]
-        public Genero? Get(int Id)
+        //se puede validar el tipo de parametro a recibir Id:int de esta manera se limita a solo tipo numerico
+        [HttpGet("{Id:int}/{nombre}")]
+        public Genero? Get(int Id,string nombre) 
         {
             var genero = repositorio.ObtenerPorId(Id);
             if (genero == null)
