@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 namespace backApi_vs.Controllers
 {
     [Route("api/generos")]
+    [ApiController]
     public class GenerosController:Controller
     {
         private readonly IRepositorio repositorio;
@@ -26,10 +27,7 @@ namespace backApi_vs.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Genero?>> Get_ActionText(int Id, [FromHeader] string nombre) 
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+          
             var genero = await repositorio.ObtenerPorId(Id);
             if (genero == null)
             {
@@ -52,9 +50,9 @@ namespace backApi_vs.Controllers
             return NoContent();
         }
         [HttpDelete]
-        public void Delete()
+        public ActionResult Delete()
         {
-
+            return NoContent();
         }
     }
 }
