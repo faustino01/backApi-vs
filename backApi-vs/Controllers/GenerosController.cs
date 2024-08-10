@@ -1,11 +1,14 @@
 ﻿using backApi_vs.Entidades;
 using backApi_vs.Entidades.Repositorios;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+
 
 namespace backApi_vs.Controllers
 {
     [Route("api/generos")]
-    public class GenerosController
+    public class GenerosController:Controller
     {
         private readonly IRepositorio repositorio;
 
@@ -13,32 +16,40 @@ namespace backApi_vs.Controllers
             this.repositorio = repositorio;
         }
         [HttpGet]
-        public List<Genero> Get()
+        public ActionResult<List<Genero>> Get()
         {
             return repositorio.ObtenerTodosLosGeneros();
         }
         //se puede validar el tipo de parametro a recibir Id:int de esta manera se limita a solo tipo numerico
-        [HttpGet("{Id:int}/{nombre}")]
-        public Genero? Get(int Id,string nombre) 
+        [HttpGet("{Id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Genero?>> Get_ActionText(int Id, [FromHeader] string nombre) 
         {
-            var genero = repositorio.ObtenerPorId(Id);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var genero = await repositorio.ObtenerPorId(Id);
             if (genero == null)
             {
-
+               return NotFound();
             }
 
+
             return genero;
+
         }
 
         [HttpPost]
-        public void Post()
+        public ActionResult Post([FromBody] Genero genero)
         {
-
+            return NoContent();
         }
         [HttpPut]
-        public void Put()
+        public ActionResult Put([FromBody] Genero genero)
         {
-
+            return NoContent();
         }
         [HttpDelete]
         public void Delete()
