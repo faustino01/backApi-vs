@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using backApi_vs.Validaciones;
+using System.ComponentModel.DataAnnotations;
 
 namespace backApi_vs.Entidades
 {
@@ -7,6 +8,7 @@ namespace backApi_vs.Entidades
         public int Id { get; set; }
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(maximumLength:10)]
+        [PrimeraLetraMayuscula]
         public string Nombre { get; set; } = string.Empty;
         [Range(18,120)]
         public int Edad {  get; set; }
