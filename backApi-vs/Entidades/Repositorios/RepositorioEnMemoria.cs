@@ -3,7 +3,7 @@
     public class RepositorioEnMemoria : IRepositorio
     {
         private List<Genero> _generos;
-        public RepositorioEnMemoria()
+        public RepositorioEnMemoria(ILogger<RepositorioEnMemoria> logger)
         {
             _generos = new List<Genero>()
             {
@@ -11,7 +11,9 @@
                     new Genero(){Id = 2, Nombre = "Ficcion"}
 
             };
+            _guid = Guid.NewGuid();
         }
+        public Guid _guid;
         public List<Genero> ObtenerTodosLosGeneros()
         {
             return _generos;
@@ -21,6 +23,11 @@
         {
             await Task.Delay(1);
             return _generos.FirstOrDefault(x => x.Id == Id);
+        }
+
+        public Guid ObtenerGuid()
+        {
+            return _guid;
         }
     }
 }

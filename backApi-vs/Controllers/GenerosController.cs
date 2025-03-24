@@ -12,14 +12,22 @@ namespace backApi_vs.Controllers
     public class GenerosController:Controller
     {
         private readonly IRepositorio repositorio;
+        private readonly ILogger<GenerosController> logger;
 
-        public GenerosController(IRepositorio repositorio) {
+        public GenerosController(IRepositorio repositorio,ILogger<GenerosController> logger) {
             this.repositorio = repositorio;
+            this.logger = logger;
         }
         [HttpGet]
         public ActionResult<List<Genero>> Get()
         {
+            logger.LogInformation("vamos a mostrar todos los generos");
             return repositorio.ObtenerTodosLosGeneros();
+        }
+        [HttpGet("guid")]
+        public ActionResult<Guid> GetGUID()
+        {
+            return repositorio.ObtenerGuid();
         }
         //se puede validar el tipo de parametro a recibir Id:int de esta manera se limita a solo tipo numerico
         [HttpGet("{Id:int}")]
@@ -27,10 +35,11 @@ namespace backApi_vs.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Genero?>> Get_ActionText(int Id, [FromHeader] string nombre) 
         {
-          
+            logger.LogDebug($"obteniendo genero por ID: {Id}");
             var genero = await repositorio.ObtenerPorId(Id);
             if (genero == null)
             {
+               logger.LogWarning($"no pudimos encontrar el genero ID: {Id}");
                return NotFound();
             }
 
