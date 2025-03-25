@@ -11,6 +11,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+app.Map("/mapa1", (app) =>
+{
+    app.Run(async context => { await context.Response.WriteAsync("estoy interceptando el pipeline"); });
+
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
