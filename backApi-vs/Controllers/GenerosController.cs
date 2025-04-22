@@ -19,6 +19,7 @@ namespace backApi_vs.Controllers
             this.logger = logger;
         }
         [HttpGet]
+        [ResponseCache(Duration =60)]
         public ActionResult<List<Genero>> Get()
         {
             logger.LogInformation("vamos a mostrar todos los generos");
