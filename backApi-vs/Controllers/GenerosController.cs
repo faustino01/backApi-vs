@@ -1,5 +1,8 @@
 ﻿using backApi_vs.Entidades;
 using backApi_vs.Entidades.Repositorios;
+using backApi_vs.Filtros;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -9,6 +12,7 @@ namespace backApi_vs.Controllers
 {
     [Route("api/generos")]
     [ApiController]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class GenerosController:Controller
     {
         private readonly IRepositorio repositorio;
@@ -19,7 +23,8 @@ namespace backApi_vs.Controllers
             this.logger = logger;
         }
         [HttpGet]
-        [ResponseCache(Duration =60)]
+        //[ResponseCache(Duration =60)]
+        [ServiceFilter(typeof(MiFiltroDeAccion))]
         public ActionResult<List<Genero>> Get()
         {
             logger.LogInformation("vamos a mostrar todos los generos");
@@ -40,13 +45,11 @@ namespace backApi_vs.Controllers
             var genero = await repositorio.ObtenerPorId(Id);
             if (genero == null)
             {
+                throw new ApplicationException($"El genero de ID {Id} no fue encontrado");
                logger.LogWarning($"no pudimos encontrar el genero ID: {Id}");
                return NotFound();
             }
-
-
             return genero;
-
         }
 
         [HttpPost]

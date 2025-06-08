@@ -1,6 +1,7 @@
 using backApi_vs.Entidades.Repositorios;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using backApi_vs.Filtros;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +9,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
 builder.Services.AddResponseCaching();
 builder.Services.AddTransient<IRepositorio, RepositorioEnMemoria>();
-builder.Services.AddControllers();
+builder.Services.AddTransient<MiFiltroDeAccion>();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add(typeof(FiltroDeExcepcion));
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -49,7 +54,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseResponseCaching(); 
+app.UseResponseCaching();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
