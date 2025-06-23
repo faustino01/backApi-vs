@@ -5,6 +5,13 @@ using backApi_vs.Filtros;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+var frontendUrl = builder.Configuration["frontend_url"] ?? throw new Exception("La variable 'frontend_url' no está configurada.");
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy => { policy.WithOrigins(frontendUrl).AllowAnyMethod().AllowAnyHeader(); });
+});
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
 builder.Services.AddResponseCaching();
 builder.Services.AddControllers(options =>
@@ -29,7 +36,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
 
+app.UseCors();
 
 app.UseAuthentication();
 

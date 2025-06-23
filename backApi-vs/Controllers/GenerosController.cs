@@ -24,7 +24,7 @@ namespace backApi_vs.Controllers
       
         public ActionResult<List<Genero>> Get()
         {
-            return new List<Genero>() { new Genero() { Id = 1, Nombre = "faustino" } };
+            return new List<Genero>() { new Genero() { Id = 1, Nombre = "TINA TIN" } };
         } 
       
         //se puede validar el tipo de parametro a recibir Id:int de esta manera se limita a solo tipo numerico
