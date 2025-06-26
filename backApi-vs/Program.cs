@@ -1,12 +1,16 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using backApi_vs.Filtros;
+using backApi_vs;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var frontendUrl = builder.Configuration["frontend_url"] ?? throw new Exception("La variable 'frontend_url' no está configurada.");
 
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+ options.UseSqlServer(builder.Configuration.GetConnectionString("defaultConnection")));
 
 builder.Services.AddCors(options =>
 {
